@@ -358,7 +358,12 @@ for variables with n > 1 also replace the value-fn with a two arity function [sa
                           (update-inm [k] (fn [v] (merge v {:proposed value
                                                             :log-ratio log-ratio
                                                             :prev-logp prev-logp
-                                                            :prev-value prev-value})))))))) 
+                                                            :prev-value prev-value
+                                                            :why (if accepted
+                                                                   (if (pos? log-ratio)
+                                                                     :accepted
+                                                                     :accepted-by-flip)
+                                                                   :rejected)})))))))) 
         next #_(loop [uk update-order
                     sample last-sample]
                (if-let [uk1 (first uk)]

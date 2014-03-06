@@ -21,11 +21,17 @@
                  {:lambda1 {:type :stochastic
                             :dist-fn (constantly
                                       (dists/exponential-distribution alpha)
+                                      #_(dists/uniform-distribution 15 30)
+                                      #_(dists/normal-distribution 19.7 5.0)
+                                      #_(dists/uniform-distribution 0 10)
                                       )
                             :n 1}
                   :lambda2 {:type :stochastic
                             :dist-fn (constantly
-                                      (dists/exponential-distribution alpha))
+                                      (dists/exponential-distribution alpha)
+                                      #_(dists/uniform-distribution 15 30)
+                                      #_(dists/normal-distribution 19.7 5.0)
+                                      )
                             :n 1}
                   :tau {:type :stochastic
                         :dist-fn (constantly
@@ -111,3 +117,53 @@
         (pprint/pprint (mcmc/stats res))
         (sms-charts model))))
 
+(comment
+  (let [vs (repeatedly 1000 #(dists/draw (dists/exponential-distribution (/ 1.0 19.7))))]
+    (-> (charts/histogram vs
+                          :title "lambda1"
+                          :nbins 30
+                          :density true)
+        (charts/set-x-range 0 100)
+        inc-core/view))
+
+
+  ;; get 3 samples from res (will be sample 50k burn + sample i
+  ;; plot histograms based on values so far
+  ;; maybe at line of current sample?
+  ;; do three steps
+  (let [ss (:samples res)]
+    (some (fn [s]
+            (when (= [:accepted :accepted-by-flip :rejected]
+                     [(get-in s [:lambda1 :why])
+                      (get-in s [:lambda2 :why])
+                      (get-in s [:tau :why])])
+              s)) ss))
+  (let [[s1 s2 s3] (take 3 (drop 100 (:samples res)))]
+    (doall (for [s [s1 s2 s3]]
+               (into {}
+                     (for [[k v] s
+                           :when (contains? v :accepted)]
+                       [k (select-keys v [:accepted :accepted-by-flip :rejected :value])]))))
+    (let [lambda1-so-far (->> res
+                              :samples
+                              (take 2000)
+                              (mapv (comp :value :lambda1)))
+          lambda1-vals (->> res
+                            :samples
+                            (mapv (comp :value :lambda1)))]
+      (-> (charts/histogram lambda1-so-far
+                            :title "lambda1 so far"
+                            :nbins 30
+                            :density true)
+          (charts/set-x-range 15 30)
+          (charts/set-y-range 0.0 1.0)
+          inc-core/view)
+      (-> (charts/histogram lambda1-vals
+                            :title "lambda1"
+                            :nbins 30
+                            :density true)
+          (charts/set-x-range 15 30)
+          (charts/set-y-range 0.0 1.0)
+          inc-core/view))
+    )
+  )
