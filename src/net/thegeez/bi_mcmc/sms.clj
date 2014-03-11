@@ -88,12 +88,14 @@
                           :nbins 30
                           :density true)
         (charts/set-x-range 15 30)
+        (charts/set-y-range 0.0 1.0)
         inc-core/view)
     (-> (charts/histogram lambda2-vals
                           :title "lambda2"
                           :nbins 30
                           :density true)
         (charts/set-x-range 15 30)
+        (charts/set-y-range 0.0 1.0)
         inc-core/view)
     (-> (charts/histogram tau-vals
                           :title "tau"
