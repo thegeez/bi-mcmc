@@ -2,8 +2,12 @@
 
 Clojure port of parts of [PyMC][PyMC] to work through [ProbHack] 
 
+Also contains an example from [MatKelsey][MatKelsey]
+
 [PyMC]: https://github.com/pymc-devs/pymc
-[ProbHack]: https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers
+[ProbHack]:
+https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers
+[MatKelcey]: http://matpalm.com/blog/2012/12/27/dead_simple_pymc/
 
 ## About
 
