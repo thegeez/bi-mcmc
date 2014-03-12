@@ -2,7 +2,7 @@
 
 Clojure port of parts of [PyMC][PyMC] to work through [ProbHack] 
 
-Also contains an example from [MatKelsey][MatKelsey]
+Also contains an example from [MatKelcey][MatKelcey]
 
 [PyMC]: https://github.com/pymc-devs/pymc
 [ProbHack]:
